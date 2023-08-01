@@ -1,3 +1,21 @@
+let rock = document.getElementById("rock");
+let paper = document.getElementById("paper");
+let scissors = document.getElementById('scissors');
+
+let playerScore = document.querySelector('.playerScore');
+let computerScore = document.querySelector('.computerScore');
+let drawScore = document.querySelector('.drawScore');
+
+let playerCounter = 0;
+let drawCounter = 0;
+let computerCounter = 0;
+
+let body = document.querySelector('body');
+
+rock.addEventListener('click', playRock);
+paper.addEventListener('click', playPaper);
+scissors.addEventListener('click', playScissors);
+
 function getComputerChoice(){
     if (Math.random() < 0.33) {
         return "Rock";
@@ -14,51 +32,73 @@ function play(playerSelection, computerSelection) {
         case "rock":
             switch (computerSelection.toLowerCase()) {
                 case "rock":
-                    return "You tie! You're both rock!";
+                    drawScore.textContent = `Draws - ${++drawCounter}`;
                     break;
                 case "paper":
-                    return "You lose! Paper beats rock!";
+                    computerScore.textContent = `Computer - ${++computerCounter}`;
+                    checkWinner();
                     break;
                 case "scissors":
-                    return "You win! Rock beats scissors!";
+                    playerScore.textContent = `Player - ${++playerCounter}`;
+                    checkWinner();
                     break;
             }
             break;
         case "paper":
             switch (computerSelection.toLowerCase()) {
                 case "rock":
-                    return "You win! Paper beats rock!";
+                    playerScore.textContent = `Player - ${++playerCounter}`;
+                    checkWinner();
                     break;
                 case "paper":
-                    return "You tie! You're both paper!";
+                    drawScore.textContent = `Draws - ${++drawCounter}`;
                     break; 
                 case "scissors":
-                    return "You lose! Scissors beat paper!";
+                    computerScore.textContent = `Computer - ${++computerCounter}`;
+                    checkWinner();
             }
             break;
         default:
             switch (computerSelection.toLowerCase()) {
                 case "rock":
-                    return "You lose! Rock beats scissors!";
+                    computerScore.textContent = `Computer - ${++computerCounter}`;
+                    checkWinner();
                     break;
                 case "paper":
-                    return "You win! Scissors beats paper!";
+                    playerScore.textContent = `Player - ${++playerCounter}`;
+                    checkWinner();
                     break; 
                 case "scissors":
-                    return "You tie! You're both scissors!";
+                    drawScore.textContent = `Draws - ${++drawCounter}`;
             }
     }
 }
 
-function game() {
-    let player = prompt("Rock, paper, or scissors?");
-    let comp = getComputerChoice();
+function playRock() {
+    play('rock', getComputerChoice());
+}
 
-    for (let a = 0; a < 5; a++) {
-        console.log(play(player, comp));
-        if (a < 4) {
-            player = prompt("Let's play again! Rock, paper, or scissors?");
-            comp = getComputerChoice();
+function playPaper() {
+    play('paper', getComputerChoice());
+}
+
+function playScissors() {
+    play('scissors', getComputerChoice());
+}
+
+function checkWinner() {
+    if (playerCounter === 5 || computerCounter === 5) {
+        rock.removeEventListener('click', playRock);
+        paper.removeEventListener('click', playPaper);
+        scissors.removeEventListener('click', playScissors);
+        if (playerCounter === 5) {
+            let announcement = document.createElement('div');
+            announcement.textContent = "The player wins!";
+            body.appendChild(announcement);
+        } else if (computerCounter === 5) {
+            let announcement = document.createElement('div');
+            announcement.textContent = "The computer wins!";
+            body.appendChild(announcement);
         }
     }
 }
